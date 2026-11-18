@@ -1,0 +1,15 @@
+
+<?xml version="1.0" encoding="UTF-8"?>
+<plantillaEvaluacionOcupacional version="1.0.0">
+    <sistema>BIOMED</sistema>
+    <modulo>Salud Ocupacional</modulo>
+    <entorno>desarrollo</entorno>
+    <secciones>
+        <seccion id="datos-evaluacion">
+            <campo nombre="codigoEvaluacion" tipo="texto" obligatorio="true"/>
+            <campo nombre="fechaEvaluacion" tipo="fecha" obligatorio="true"/>
+            <campo nombre="tipoEvaluacion" tipo="texto" obligatorio="true"/>
+        </seccion>
+    </secciones>
+</plantillaEvaluacionOcupacional>
+  
