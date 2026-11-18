@@ -1,13 +1,13 @@
-
 {
   "sistema": "BIOMED",
   "modulo": "Diagnóstico Molecular",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "entorno": "desarrollo",
   "parametros": [
     {
       "codigo": "MOL-001",
       "nombre": "Índice de control de procesamiento molecular",
+      "descripcion": "Indicador interno para el control del procesamiento de configuraciones moleculares.",
       "rango_referencia": {
         "minimo": 0,
         "maximo": 100,
