@@ -1,0 +1,42 @@
+
+name: CI - Validacion XML
+
+on:
+  push:
+    paths:
+      - "config/**/*.xml"
+      - ".github/workflows/ci-xml.yml"
+  pull_request:
+    paths:
+      - "config/**/*.xml"
+      - ".github/workflows/ci-xml.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validar-xml:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Obtener archivos de BIOMED
+        uses: actions/checkout@v4
+
+      - name: Validar sintaxis XML
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import xml.etree.ElementTree as ET
+
+          archivos = list(Path("config").rglob("*.xml"))
+
+          if not archivos:
+              raise SystemExit("No se encontraron archivos XML")
+
+          for archivo in archivos:
+              ET.parse(archivo)
+              print(f"XML valido: {archivo}")
+
+          print("Validacion XML completada correctamente")
+          PY
