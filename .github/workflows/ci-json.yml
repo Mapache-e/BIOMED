@@ -1,0 +1,44 @@
+
+name: CI - Validacion JSON
+
+on:
+  push:
+    paths:
+      - "config/**/*.json"
+      - ".github/workflows/ci-json.yml"
+  pull_request:
+    paths:
+      - "config/**/*.json"
+      - ".github/workflows/ci-json.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validar-json:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Obtener archivos de BIOMED
+        uses: actions/checkout@v7
+
+      - name: Validar sintaxis JSON
+        run: |
+          python3 - <escape><<</escape>'PY'
+          import json
+          from pathlib import Path
+
+          archivos = list(Path("config").rglob("*.json"))
+
+          if not archivos:
+              raise SystemExit("No se encontraron archivos JSON")
+
+          for archivo in archivos:
+              with archivo.open(encoding="utf-8") as contenido:
+                  json.load(contenido)
+              print(f"JSON valido: {archivo}")
+
+          print("Validacion JSON completada correctamente")
+          PY
+  
