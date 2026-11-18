@@ -1,0 +1,42 @@
+
+name: CD - Entrega de configuraciones
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "config/**"
+      - "README.md"
+      - ".github/workflows/cd-entrega.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  preparar-entrega:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Obtener repositorio BIOMED
+        uses: actions/checkout@v6
+
+      - name: Validar configuraciones
+        run: |
+          python3 -m json.tool config/rangos_diagnostico_molecular.json > /dev/null
+          python3 -c "import xml.etree.ElementTree as ET; ET.parse('config/plantilla_evaluacion_ocupacional.xml')"
+
+      - name: Generar paquete de entrega
+        run: |
+          mkdir -p dist
+          printf "Proyecto: BIOMED\nCommit: %s\n" "$GITHUB_SHA" > VERSION.txt
+          zip -r dist/BIOMED-configuraciones.zip config README.md VERSION.txt
+
+      - name: Publicar paquete descargable
+        uses: actions/upload-artifact@v6
+        with:
+          name: BIOMED-entrega
+          path: dist/BIOMED-configuraciones.zip
+          if-no-files-found: error
+          retention-days: 30
+  
