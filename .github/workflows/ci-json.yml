@@ -21,24 +21,25 @@ jobs:
 
     steps:
       - name: Obtener archivos de BIOMED
-        uses: actions/checkout@v7
+        uses: actions/checkout@v4
 
       - name: Validar sintaxis JSON
+        shell: bash
         run: |
-          python3 - <escape><<</escape>'PY'
-          import json
-          from pathlib import Path
+          set -e
+          shopt -s globstar nullglob
 
-          archivos = list(Path("config").rglob("*.json"))
+          archivos=(config/**/*.json)
 
-          if not archivos:
-              raise SystemExit("No se encontraron archivos JSON")
+          if (( ${#archivos[@]} == 0 )); then
+            echo "No se encontraron archivos JSON"
+            exit 1
+          fi
 
-          for archivo in archivos:
-              with archivo.open(encoding="utf-8") as contenido:
-                  json.load(contenido)
-              print(f"JSON valido: {archivo}")
+          for archivo in "${archivos[@]}"; do
+            python3 -m json.tool "$archivo" > /dev/null
+            echo "JSON valido: $archivo"
+          done
 
-          print("Validacion JSON completada correctamente")
-          PY
+          echo "Validacion JSON completada correctamente"
   
