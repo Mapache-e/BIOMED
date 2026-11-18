@@ -1,0 +1,20 @@
+
+{
+  "sistema": "BIOMED",
+  "modulo": "Diagnóstico Molecular",
+  "version": "1.0.0",
+  "entorno": "desarrollo",
+  "parametros": [
+    {
+      "codigo": "MOL-001",
+      "nombre": "Índice de control de procesamiento molecular",
+      "rango_referencia": {
+        "minimo": 0,
+        "maximo": 100,
+        "unidad": "índice"
+      },
+      "estado": "activo"
+    }
+  ]
+}
+  
