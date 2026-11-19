@@ -23,7 +23,11 @@ class TestValidadorConfiguraciones(unittest.TestCase):
             "version": "1.1.0",
             "parametros": [{
                 "codigo": "MOL-001",
-                "rango_referencia": {"minimo": 0, "maximo": 100, "unidad": "indice"},
+                "rango_referencia": {
+                    "minimo": 0,
+                    "maximo": 100,
+                    "unidad": "indice",
+                },
             }],
         }
         self.guardar_json()
@@ -42,6 +46,19 @@ class TestValidadorConfiguraciones(unittest.TestCase):
 
     def test_configuracion_valida(self):
         self.assertTrue(validar_configuraciones(self.carpeta))
+
+    def test_codigo_duplicado(self):
+        self.datos["parametros"].append({
+            "codigo": "MOL-001",
+            "rango_referencia": {
+                "minimo": 1,
+                "maximo": 2,
+                "unidad": "indice",
+            },
+        })
+        self.guardar_json()
+        with self.assertRaisesRegex(ValueError, "codigo duplicado"):
+            validar_configuraciones(self.carpeta)
 
     def test_rango_invertido(self):
         rango = self.datos["parametros"][0]["rango_referencia"]
@@ -64,7 +81,9 @@ class TestValidadorConfiguraciones(unittest.TestCase):
             validar_configuraciones(self.carpeta)
 
     def test_xml_incorrecto(self):
-        self.xml_path.write_text("<plantilla><sin-cierre>", encoding="utf-8")
+        self.xml_path.write_text(
+            "<plantilla><sin-cierre>", encoding="utf-8"
+        )
         with self.assertRaises(Exception):
             validar_configuraciones(self.carpeta)
 

@@ -25,9 +25,21 @@ def validar_configuraciones(carpeta):
     if not isinstance(parametros, list) or not parametros:
         raise ValueError("El JSON debe contener parametros")
 
+    codigos = set()
+
     for indice, parametro in enumerate(parametros, start=1):
         if not isinstance(parametro, dict):
             raise ValueError(f"Parametro {indice}: estructura incorrecta")
+
+        codigo = parametro.get("codigo")
+        if not isinstance(codigo, str) or not codigo.strip():
+            raise ValueError(f"Parametro {indice}: codigo obligatorio")
+
+        codigo_normalizado = codigo.strip().upper()
+        if codigo_normalizado in codigos:
+            raise ValueError(f"Parametro {indice}: codigo duplicado")
+
+        codigos.add(codigo_normalizado)
 
         rango = parametro.get("rango_referencia")
         if not isinstance(rango, dict):
@@ -36,9 +48,11 @@ def validar_configuraciones(carpeta):
         minimo = rango.get("minimo")
         maximo = rango.get("maximo")
         for valor in (minimo, maximo):
-            if (not isinstance(valor, (int, float))
-                    or isinstance(valor, bool)
-                    or not math.isfinite(valor)):
+            if (
+                not isinstance(valor, (int, float))
+                or isinstance(valor, bool)
+                or not math.isfinite(valor)
+            ):
                 raise ValueError(f"Parametro {indice}: limites no numericos")
 
         if minimo > maximo:
